@@ -1,0 +1,74 @@
+Useful Commands - Kubernetes and Openstack
+
+Ingress : 
+kubectl -n <namespace> get ingress -o custom-columns=NAME:.metadata.name,PROXY-READ-TIMEOUT:".metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout"
+
+Openstack : 
+
+--- To list all the projects/tenant in openstack
+openstack project list 
+
+--- To see details about the projects/tenant in OS
+openstack project show <project/tenant>
+
+--- To list all the instances running in all the tenants,
+nova list --all-tenants
+
+--- To list all the instances associated with particular project,
+openstack server list --project <project/tenant>
+
+--- To see the details about the instances eg, the server on which it runs, az, networks, etc
+openstack server show <instance-id>
+
+--- Alternative to the instance name, id is  
+OS-EXT-SRV-ATTR:instance_name       | instance-0b581a75 ( example )
+
+--- To be able to login to the instance,
+virsh console <instance-id>
+
+--- To check the events that took place and get the request id to check in logs,
+openstack server event list 76d6a680-ea24-432a-bb65-dee5e47b27fb
+
+--- The logs can be found in the nova logs on particular controller node, grab the request ID and find in the logs,
+Logs location --- /var/log/nova/<logs>
+
+--- To check the list of images available while creating the instance,
+openstack image list
+
+--- List the security groups configured in the environment,
+openstack security group list
+
+--- To get values for particular fields,
+openstack server show <instanceid> -f value -c flavor
+
+--- To get domain details,
+openstack domain list
+
+--- Users associated with particular project,
+openstack role assignment list --project <project>
+
+--- Check if the hypervisors are up and running.
+openstack hypervisor list
+
+--- Create flavor in openstack
+openstack flavor create --ram 2048 --vcpus 2 --disk 10 --private build.2x2x10
+
+--- Set the project for a flavor
+openstack flavor show e0eb1866-75c8-4de0-9484-a0c219170276
+openstack flavor set --project 10993f13988c42f6bf7c7da10c3ec795 463541cc-b5e5-4abc-a43e-d45f093980a1
+openstack flavor set --project a877601c6ef2429e9f61b4ddbd924880 463541cc-b5e5-4abc-a43e-d45f093980a1
+
+--- To get image size in gb's ( roughly )
+openstack image show <id> -f value -c size | awk '{ print $1/1024^3 }'
+
+--- To check required image details after the image is created.
+openstack image list --long -f value -f table -c Name -c 'Disk Format' -c Visibility | grep base-rhel-9 | grep -v base-rhel-9.1-sasit
+
+--- To set the image public
+openstack image set --public <id>
+
+PVC : Netapp
+
+vserver export-policy show
+vserver export-policy rule show -policyname <policy-name>
+vserver export-policy rule create -policyname default -ruleindex 3 -clientmatch 10.36.0.151 -protocol nfs -rwrule any -rorule any
