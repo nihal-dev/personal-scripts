@@ -42,7 +42,7 @@ then
 ### To access the ITK8s cluster
 elif [[ $1 == 'kitk8s' ]]
 then
-    ssh -i /c/Users/niysha/itk8s-internal rocky@itk8s-int-ctl01.itk8s-int.sashq-d.openstack.sas.com
+    ssh -i /c/Users/niysha/itk8s-internal rocky@server.com
 
 ### To exec into a pod in particular cluster
 elif [[ $1 == 'kexec' ]]
